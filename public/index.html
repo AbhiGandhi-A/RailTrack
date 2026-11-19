@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RailTrack – Live Indian Railways Tracker & Route Traction</title>
+  <meta name="description" content="Track Indian Railways trains live with high-precision running status, interactive traction route map, delay insights, and station departure boards.">
+  <meta name="theme-color" content="#090d16">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><rect x='6' y='6' width='20' height='20' rx='4' fill='none' stroke='%2338bdf8' stroke-width='2'/><line x1='6' y1='14' x2='26' y2='14' stroke='%2338bdf8' stroke-width='2'/><circle cx='10' cy='20' r='1.5' fill='%2338bdf8'/><circle cx='22' cy='20' r='1.5' fill='%2338bdf8'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="top-brand-wrap">
+      <a class="brand" href="#home">
+        <span class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="3" width="16" height="16" rx="2"></rect>
+            <path d="M4 11h16"></path>
+            <path d="M12 3v8"></path>
+            <path d="m8 19-3 3"></path>
+            <path d="m16 19 3 3"></path>
+            <circle cx="8" cy="15" r="1.5" fill="currentColor"></circle>
+            <circle cx="16" cy="15" r="1.5" fill="currentColor"></circle>
+          </svg>
+        </span>
+        <span class="brand-text">Rail<span class="brand-accent">Track</span></span>
+      </a>
+      <span class="live-indicator"><span class="ping-dot"></span>LIVE</span>
+    </div>
+
+    <div class="header-right">
+      <span id="liveClock" class="live-clock" title="Indian Standard Time">--:--:-- IST</span>
+      <button id="menuBtn" aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <nav id="nav">
+        <a href="#home">
+          <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </a>
+        <a href="#train">
+          <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><circle cx="8" cy="15" r="1.5"/><circle cx="16" cy="15" r="1.5"/><path d="m8 19-3 3"/><path d="m16 19 3 3"/></svg>
+          Live Train Status
+        </a>
+        <a href="#station">
+          <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H4z"/><path d="M12 16v5"/><path d="M8 21h8"/><circle cx="8" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg>
+          Station Board
+        </a>
+        <a href="#schedule">
+          <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Train Schedule
+        </a>
+        <a href="#fav">
+          <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Favourites
+        </a>
+        <a href="#about">
+          <svg class="nav-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          About
+        </a>
+      </nav>
+      <button id="themeBtn" aria-label="Toggle light or dark theme" title="Toggle theme">
+        <svg class="theme-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. HOME VIEW -->
+    <section id="home" class="view">
+      <div class="hero">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span> Real-Time Transit Intelligence
+        </div>
+        <h1>Your Train. Your Journey. <span class="gradient-text">Live.</span></h1>
+        <p class="hero-subtitle">High-precision Indian Railways live running status, interactive traction animation, and real-time station departure boards.</p>
+
+        <form id="searchForm" class="searchbox" autocomplete="off">
+          <div class="search-inputs-wrap">
+            <div class="ac">
+              <span class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </span>
+              <input id="q" placeholder="Enter 5-digit train number (e.g. 22930 or 12951) or name" aria-label="Train" required>
+              <ul id="sugg" class="sugg"></ul>
+            </div>
+            <div class="date-input-group">
+              <span class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </span>
+              <input id="dateIn" type="date" aria-label="Journey date">
+            </div>
+            <button type="submit" id="searchSubmitBtn">
+              <span id="sp" class="spin"></span>
+              <span class="btn-text">Track Train</span>
+              <svg class="btn-arrow-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+          <div class="date-chips-row">
+            <span class="chips-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Journey Date
+            </span>
+            <div class="chips-group">
+              <button type="button" class="date-chip" data-date-offset="-1">Yesterday</button>
+              <button type="button" class="date-chip active" data-date-offset="0">Today</button>
+              <button type="button" class="date-chip" data-date-offset="1">Tomorrow</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="pop">
+          <span class="pop-label">Popular Expresses:</span>
+          <div class="pop-chips">
+            <button data-t="22930" class="pop-chip"><span class="chip-num">22930</span> <span class="chip-title">BRC DRD SFAST</span></button>
+            <button data-t="12951" class="pop-chip"><span class="chip-num">12951</span> <span class="chip-title">Mumbai Rajdhani</span></button>
+            <button data-t="12301" class="pop-chip"><span class="chip-num">12301</span> <span class="chip-title">Howrah Rajdhani</span></button>
+            <button data-t="12009" class="pop-chip"><span class="chip-num">12009</span> <span class="chip-title">Mumbai Shatabdi</span></button>
+            <button data-t="22435" class="pop-chip"><span class="chip-num">22435</span> <span class="chip-title">Vande Bharat Exp</span></button>
+            <button data-t="12626" class="pop-chip"><span class="chip-num">12626</span> <span class="chip-title">Kerala Express</span></button>
+          </div>
+        </div>
+
+        <div id="recent" class="pop recent-wrap"></div>
+
+        <!-- Features Showcase -->
+        <div class="hero-features">
+          <div class="feat-card">
+            <div class="feat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div class="feat-title">Dual-Engine Telemetry</div>
+            <div class="feat-desc">Smooth animated train motion calibrated with live arrival and departure estimates.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="4" rx="1"/><line x1="7" y1="6" x2="7" y2="18"/><line x1="12" y1="6" x2="12" y2="18"/><line x1="17" y1="6" x2="17" y2="18"/></svg>
+            </div>
+            <div class="feat-title">50+ Station Elevation</div>
+            <div class="feat-desc">Complete route timeline with platform numbers, delays, and halt timings.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16"/><path d="M9 14h6"/><path d="M9 17h4"/></svg>
+            </div>
+            <div class="feat-title">Live Station Boards</div>
+            <div class="feat-desc">Up-to-the-minute departures and arrivals for any railway station across India.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LIVE TRAIN STATUS VIEW -->
+    <section id="train" class="view" hidden>
+      <div id="trainErr"></div>
+      <div id="dash" hidden>
+        <!-- Header Card -->
+        <div class="card head">
+          <div class="train-primary-info">
+            <div class="train-title-row">
+              <span class="train-icon-badge">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><circle cx="8" cy="15" r="1.5"/><circle cx="16" cy="15" r="1.5"/><path d="m8 19-3 3"/><path d="m16 19 3 3"/></svg>
+              </span>
+              <h2 id="tName"></h2>
+            </div>
+            <div id="tRoute" class="muted route-summary"></div>
+            <div id="tMeta" class="muted meta-info"></div>
+          </div>
+          <div class="badges">
+            <span id="fresh" class="badge"></span>
+            <span id="runState" class="badge"></span>
+            <button id="favBtn" class="ghost">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>Favourite</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Refresh Countdown & Auto-Sync Bar -->
+        <div class="bar">
+          <div class="sync-status">
+            <span class="sync-indicator"></span>
+            <span id="countdown" class="muted"></span>
+          </div>
+          <div class="sync-actions">
+            <button id="refreshBtn" class="ghost">
+              <svg class="refresh-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+              <span>Refresh</span>
+            </button>
+            <span id="lastOk" class="muted"></span>
+          </div>
+        </div>
+
+        <!-- Stale Warning -->
+        <div id="staleWarn" class="warn" hidden></div>
+
+        <!-- Interactive Route Visualizer Card -->
+        <div id="routeVisual" class="card">
+          <div id="routeNotice" class="route-notice-banner" hidden></div>
+          <div id="trackContent">
+            <div class="track-toolbar">
+              <div class="track-header-info">
+                <span class="track-pulse"></span>
+                <span id="trackLabel" class="track-title">25kV AC Electric Traction Route</span>
+              </div>
+              <div class="track-controls">
+                <button type="button" id="btnFocusTrain" class="track-ctrl-btn" title="Center view on train">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                  <span>Center Train</span>
+                </button>
+                <button type="button" id="btnTrackOrigin" class="track-ctrl-btn" title="Jump to origin station">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+                  <span>Origin</span>
+                </button>
+                <button type="button" id="btnTrackDest" class="track-ctrl-btn" title="Jump to destination">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                  <span>Destination</span>
+                </button>
+              </div>
+            </div>
+            <div class="svgwrap">
+              <svg id="track" role="img" aria-label="Train route animation"></svg>
+            </div>
+            <div class="track-legend-bar">
+              <div class="track-legend">
+                <span class="legend-item"><span class="legend-dot done"></span> Completed</span>
+                <span class="legend-item"><span class="legend-dot current"></span> Current</span>
+                <span class="legend-item"><span class="legend-dot next"></span> Next Station</span>
+                <span class="legend-item"><span class="legend-dot inter"></span> Intermediate (No Halt)</span>
+                <span class="legend-item"><span class="legend-dot wire"></span> 25kV Catenary</span>
+              </div>
+              <div id="animNote" class="muted small"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Metrics Cards Grid -->
+        <div id="info" class="grid"></div>
+
+        <!-- Route Timeline -->
+        <div class="timeline-header-wrap">
+          <h3 id="routeTitle">Route timeline</h3>
+          <span class="timeline-hint">Select a stop to view pass-through stations</span>
+        </div>
+        <div id="timeline" class="timeline"></div>
+        <div id="stationDetail" class="card" hidden></div>
+      </div>
+    </section>
+
+    <!-- 3. STATION LIVE BOARD VIEW -->
+    <section id="station" class="view" hidden>
+      <div class="view-header">
+        <h2>Station Live Board</h2>
+        <p class="muted">Live train arrivals and departures for any Indian Railways station.</p>
+      </div>
+      <form id="stForm" class="searchbox" autocomplete="off">
+        <div class="search-inputs-wrap">
+          <div class="ac">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H4z"/><path d="M12 16v5"/><path d="M8 21h8"/><circle cx="8" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg>
+            </span>
+            <input id="sq" placeholder="Station name or code (e.g. NDLS, MMCT, BRC, HWH)" required>
+            <ul id="sSugg" class="sugg"></ul>
+          </div>
+          <button type="submit">Show board →</button>
+        </div>
+      </form>
+      <div class="pop pop-stations">
+        <span class="pop-label">Quick Stations:</span>
+        <button type="button" class="pop-chip" id="stQuickNDLS"><span class="chip-num">NDLS</span> New Delhi</button>
+        <button type="button" class="pop-chip" id="stQuickMMCT"><span class="chip-num">MMCT</span> Mumbai Central</button>
+        <button type="button" class="pop-chip" id="stQuickBRC"><span class="chip-num">BRC</span> Vadodara</button>
+        <button type="button" class="pop-chip" id="stQuickHWH"><span class="chip-num">HWH</span> Howrah</button>
+        <button type="button" class="pop-chip" id="stQuickMAS"><span class="chip-num">MAS</span> Chennai</button>
+      </div>
+      <div id="boardHead" class="muted board-status-banner"></div>
+      <div id="board"></div>
+    </section>
+
+    <!-- 4. TRAIN SCHEDULE VIEW -->
+    <section id="schedule" class="view" hidden>
+      <div class="view-header">
+        <h2>Train Schedule & Timetable</h2>
+        <p class="muted">Comprehensive official station-by-station timetable, halts, platforms, and running days.</p>
+      </div>
+      <form id="scForm" class="searchbox">
+        <div class="search-inputs-wrap">
+          <div class="ac">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><circle cx="8" cy="15" r="1.5"/><circle cx="16" cy="15" r="1.5"/><path d="m8 19-3 3"/><path d="m16 19 3 3"/></svg>
+            </span>
+            <input id="scq" placeholder="5-digit train number (e.g. 22930 or 12951)" inputmode="numeric" required>
+          </div>
+          <div class="date-input-group">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            <input id="scd" type="date">
+          </div>
+          <button type="submit">Load Schedule →</button>
+        </div>
+      </form>
+      <div class="pop pop-stations">
+        <span class="pop-label">Sample Trains:</span>
+        <button type="button" class="pop-chip" id="scQuick22930"><span class="chip-num">22930</span> BRC DRD SFAST</button>
+        <button type="button" class="pop-chip" id="scQuick12951"><span class="chip-num">12951</span> Mumbai Rajdhani</button>
+        <button type="button" class="pop-chip" id="scQuick22435"><span class="chip-num">22435</span> Vande Bharat</button>
+      </div>
+      <div id="schedOut"></div>
+    </section>
+
+    <!-- 5. FAVOURITES VIEW -->
+    <section id="fav" class="view" hidden>
+      <div class="view-header">
+        <h2>Saved Favourites</h2>
+        <p class="muted">Quickly access trains you track frequently.</p>
+      </div>
+      <div id="favList" class="grid"></div>
+    </section>
+
+    <!-- 6. ABOUT VIEW -->
+    <section id="about" class="view" hidden>
+      <div class="view-header">
+        <h2>About RailTrack</h2>
+        <p class="muted">Real-time Indian Railways tracker architecture and integrity.</p>
+      </div>
+      <div class="card about-card">
+        <div class="about-hero">
+          <div class="about-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><circle cx="8" cy="15" r="1.5"/><circle cx="16" cy="15" r="1.5"/><path d="m8 19-3 3"/><path d="m16 19 3 3"/></svg>
+          </div>
+          <div>
+            <h3>Dual-Engine Transit Architecture</h3>
+            <p class="muted">Powered by RailEngine & RailCore APIs with zero data fabrication.</p>
+          </div>
+        </div>
+        <div class="about-grid">
+          <div class="about-point">
+            <b>Zero Data Fabrication</b>
+            <p>RailTrack shows genuine data from verified railway developer platforms. Missing fields are hidden or marked unavailable. Train positions between station updates are smooth interpolated estimates based on official timetables and ETA, not raw GPS fixes.</p>
+          </div>
+          <div class="about-point">
+            <b>Overhead 25kV Electric Traction</b>
+            <p>Visualizations simulate high-speed electric locomotive traction with overhead catenary lines, pantograph contact shoes, dual steel rails, concrete sleepers, and dynamic headlight illumination.</p>
+          </div>
+          <div class="about-point">
+            <b>Dual-Engine Reliability & Caching</b>
+            <p>API keys are securely held server-side. Redundant failover between RailEngine and RailCore ensures route timetables, live station boards, and real-time telemetry always load cleanly without rate limits.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
